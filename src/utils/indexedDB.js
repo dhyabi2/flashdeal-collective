@@ -17,7 +17,14 @@ const initDB = async () => {
 
 export const addDeal = async (deal) => {
   const db = await initDB();
-  return db.add(storeName, { ...deal, createdAt: new Date().toISOString() });
+  return db.add(storeName, { 
+    ...deal, 
+    createdAt: new Date().toISOString(),
+    likes: 0,
+    dislikes: 0,
+    likesIPs: [],
+    dislikesIPs: []
+  });
 };
 
 export const getAllDeals = async () => {
@@ -40,9 +47,9 @@ export const updateDeal = async (id, updates) => {
 // Generate dummy data if IndexedDB fails
 export const generateDummyData = () => {
   const dummyDeals = [
-    { id: 1, title: 'Amazing 50% off on Electronics', imageUrl: 'https://picsum.photos/200/300', expiresAt: new Date(Date.now() + 86400000).toISOString(), likes: 10, dislikes: 2 },
-    { id: 2, title: 'Buy 1 Get 1 Free on All Shoes', imageUrl: 'https://picsum.photos/200/301', expiresAt: new Date(Date.now() + 172800000).toISOString(), likes: 15, dislikes: 1 },
-    { id: 3, title: 'Flash Sale: 70% off on Fashion', imageUrl: 'https://picsum.photos/200/302', expiresAt: new Date(Date.now() + 259200000).toISOString(), likes: 20, dislikes: 3 },
+    { id: 1, title: 'Amazing 50% off on Electronics', imageUrl: 'https://picsum.photos/200/300', expiresAt: new Date(Date.now() + 86400000).toISOString(), likes: 10, dislikes: 2, likesIPs: [], dislikesIPs: [] },
+    { id: 2, title: 'Buy 1 Get 1 Free on All Shoes', imageUrl: 'https://picsum.photos/200/301', expiresAt: new Date(Date.now() + 172800000).toISOString(), likes: 15, dislikes: 1, likesIPs: [], dislikesIPs: [] },
+    { id: 3, title: 'Flash Sale: 70% off on Fashion', imageUrl: 'https://picsum.photos/200/302', expiresAt: new Date(Date.now() + 259200000).toISOString(), likes: 20, dislikes: 3, likesIPs: [], dislikesIPs: [] },
   ];
   return dummyDeals;
 };

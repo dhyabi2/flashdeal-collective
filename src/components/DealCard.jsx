@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { updateDeal } from '../utils/indexedDB';
 import { motion } from 'framer-motion';
+import { getUserIP } from '../utils/ipUtils';
 
-const DealCard = ({ deal }) => {
+const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
   const [likes, setLikes] = useState(deal.likes || 0);
   const [dislikes, setDislikes] = useState(deal.dislikes || 0);
   const [progress, setProgress] = useState(100);
+  const [userIP, setUserIP] = useState('');
 
   useEffect(() => {
+    const fetchUserIP = async () => {
+      const ip = await getUserIP();
+      setUserIP(ip);
+    };
+    fetchUserIP();
+
     const timer = setInterval(() => {
       const now = new Date();
       const expiration = new Date(deal.expiresAt);
@@ -34,22 +42,29 @@ const DealCard = ({ deal }) => {
     return () => clearInterval(timer);
   }, [deal.expiresAt, deal.createdAt]);
 
-  const handleLike = async () => {
+  const handleVote = async (voteType) => {
+    if (!userIP) return;
+
     try {
-      const updatedDeal = await updateDeal(deal.id, { likes: likes + 1 });
-      setLikes(updatedDeal.likes);
+      const updatedDeal = await updateDeal(deal.id, { 
+        [voteType]: deal[voteType] + 1,
+        [`${voteType}IPs`]: [...(deal[`${voteType}IPs`] || []), userIP]
+      });
+      
+      if (voteType === 'likes') {
+        setLikes(updatedDeal.likes);
+      } else {
+        setDislikes(updatedDeal.dislikes);
+      }
+      
+      onUpdate(updatedDeal);
     } catch (error) {
-      console.error('Error updating likes:', error);
+      console.error(`Error updating ${voteType}:`, error);
     }
   };
 
-  const handleDislike = async () => {
-    try {
-      const updatedDeal = await updateDeal(deal.id, { dislikes: dislikes + 1 });
-      setDislikes(updatedDeal.dislikes);
-    } catch (error) {
-      console.error('Error updating dislikes:', error);
-    }
+  const canVote = (voteType) => {
+    return !(deal[`${voteType}IPs`] || []).includes(userIP);
   };
 
   return (
@@ -74,14 +89,20 @@ const DealCard = ({ deal }) => {
         </div>
         <div className="flex justify-between items-center">
           <button
-            onClick={handleLike}
-            className="flex items-center text-green-500 hover:text-green-600 transition-colors duration-200"
+            onClick={() => canVote('likes') && handleVote('likes')}
+            className={`flex items-center ${
+              canVote('likes') ? 'text-green-500 hover:text-green-600' : 'text-gray-400'
+            } transition-colors duration-200`}
+            disabled={!canVote('likes')}
           >
             <ThumbsUp className="mr-1" size={18} /> {likes}
           </button>
           <button
-            onClick={handleDislike}
-            className="flex items-center text-red-500 hover:text-red-600 transition-colors duration-200"
+            onClick={() => canVote('dislikes') && handleVote('dislikes')}
+            className={`flex items-center ${
+              canVote('dislikes') ? 'text-red-500 hover:text-red-600' : 'text-gray-400'
+            } transition-colors duration-200`}
+            disabled={!canVote('dislikes')}
           >
             <ThumbsDown className="mr-1" size={18} /> {dislikes}
           </button>
