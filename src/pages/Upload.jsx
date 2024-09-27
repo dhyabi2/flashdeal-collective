@@ -45,8 +45,8 @@ const Upload = () => {
         expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
         likes: 0,
         dislikes: 0,
-        location: location || null, // Make location optional
-        addedBy: addedBy || null, // Make addedBy optional
+        location: location || null,
+        addedBy: addedBy || null,
       };
       await addDeal(newDeal);
       navigate('/');
@@ -68,7 +68,7 @@ const Upload = () => {
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">{translations.createFlashDeal}</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.title} (max 10 words)</label>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.title} ({translations.maxTenWords})</label>
               <input
                 type="text"
                 id="title"
@@ -133,7 +133,7 @@ const Upload = () => {
               )}
             </div>
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} (Optional)</label>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} ({translations.optional})</label>
               <input
                 type="text"
                 id="location"
@@ -144,7 +144,7 @@ const Upload = () => {
               />
             </div>
             <div>
-              <label htmlFor="addedBy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.addedBy} (Optional)</label>
+              <label htmlFor="addedBy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.addedBy} ({translations.optional})</label>
               <input
                 type="text"
                 id="addedBy"

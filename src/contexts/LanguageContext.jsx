@@ -20,7 +20,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('language', language);
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
-    document.body.className = language === 'ar' ? 'font-arabic font-bold' : 'font-sans'; // Updated to include bold for Arabic
+    document.body.className = language === 'ar' ? 'font-arabic font-bold' : 'font-sans';
   }, [language]);
 
   const toggleLanguage = () => {
@@ -59,6 +59,8 @@ export const LanguageProvider = ({ children }) => {
       titleAndImageRequired: 'Title and image are mandatory',
       failedToAddDeal: 'Failed to add deal. Please try again.',
       changeLanguage: 'Change Language',
+      optional: 'Optional',
+      maxTenWords: 'max 10 words',
     },
     ar: {
       home: 'الرئيسية',
@@ -91,6 +93,8 @@ export const LanguageProvider = ({ children }) => {
       titleAndImageRequired: 'العنوان والصورة إلزاميان',
       failedToAddDeal: 'فشل في إضافة الصفقة. يرجى المحاولة مرة أخرى.',
       changeLanguage: 'تغيير اللغة',
+      optional: 'اختياري',
+      maxTenWords: 'بحد أقصى 10 كلمات',
     },
   };
 
