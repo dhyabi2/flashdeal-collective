@@ -20,6 +20,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('language', language);
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
+    document.body.className = language === 'ar' ? 'font-arabic' : 'font-sans';
   }, [language]);
 
   const toggleLanguage = () => {
