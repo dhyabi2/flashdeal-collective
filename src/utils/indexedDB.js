@@ -10,6 +10,7 @@ const initDB = async () => {
         const store = db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
         store.createIndex('title', 'title', { unique: false });
         store.createIndex('createdAt', 'createdAt', { unique: false });
+        store.createIndex('expiresAt', 'expiresAt', { unique: false });
       }
     },
   });
@@ -42,6 +43,22 @@ export const updateDeal = async (id, updates) => {
   await store.put(updatedDeal);
   await tx.done;
   return updatedDeal;
+};
+
+export const deleteExpiredDeals = async () => {
+  const db = await initDB();
+  const tx = db.transaction(storeName, 'readwrite');
+  const store = tx.objectStore(storeName);
+  const now = new Date().toISOString();
+  const expiredDeals = await store.index('expiresAt').getAllKeys(IDBKeyRange.upperBound(now));
+  
+  for (const key of expiredDeals) {
+    await store.delete(key);
+  }
+  
+  await tx.done;
+  console.log(`Deleted ${expiredDeals.length} expired deals`);
+  return expiredDeals.length;
 };
 
 // Generate dummy data if IndexedDB fails
