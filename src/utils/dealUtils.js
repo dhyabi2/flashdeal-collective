@@ -20,3 +20,16 @@ export const calculatePopularity = (likes, dislikes) => {
   if (total === 0) return 0.5; // Neutral if no votes
   return likes / total;
 };
+
+export const sortDeals = (deals, sortOption) => {
+  switch (sortOption) {
+    case 'newest':
+      return [...deals].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    case 'expiringSoon':
+      return [...deals].sort((a, b) => new Date(a.expiresAt) - new Date(b.expiresAt));
+    case 'mostLiked':
+      return [...deals].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    default:
+      return deals;
+  }
+};
