@@ -89,7 +89,7 @@ const DealCard = ({ deal, onUpdate }) => {
     if (deal.location) {
       const [lat, lng] = deal.location.split(',');
       const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -101,13 +101,13 @@ const DealCard = ({ deal, onUpdate }) => {
       whileHover={{ scale: 1.05 }}
       className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
     >
-      <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
+      <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" loading="lazy" />
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-2 font-serif text-gray-800 dark:text-gray-200">{deal.title}</h2>
         <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">{deal.category}</div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2 bg-indigo-100 dark:bg-indigo-900 rounded-full px-4 py-2">
-            <Clock className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
+            <Clock className="w-6 h-6 text-indigo-500 dark:text-indigo-400" aria-hidden="true" />
             <span className="text-lg font-bold text-indigo-600 dark:text-indigo-300">{timeLeft}</span>
           </div>
           <div className="text-sm font-semibold text-gray-500 dark:text-gray-400">
@@ -131,9 +131,10 @@ const DealCard = ({ deal, onUpdate }) => {
               canVote('likes') ? 'bg-green-100 text-green-500 hover:bg-green-200 dark:bg-green-900 dark:text-green-400 dark:hover:bg-green-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('likes')}
+            aria-label={`Like (${likes})`}
           >
             <div className="flex flex-col items-center">
-              <ThumbsUp className="mb-1" size={24} />
+              <ThumbsUp className="mb-1" size={24} aria-hidden="true" />
               <motion.span
                 key={likes}
                 initial={{ scale: 1.5, opacity: 0 }}
@@ -154,9 +155,10 @@ const DealCard = ({ deal, onUpdate }) => {
               canVote('dislikes') ? 'bg-red-100 text-red-500 hover:bg-red-200 dark:bg-red-900 dark:text-red-400 dark:hover:bg-red-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('dislikes')}
+            aria-label={`Dislike (${dislikes})`}
           >
             <div className="flex flex-col items-center">
-              <ThumbsDown className="mb-1" size={24} />
+              <ThumbsDown className="mb-1" size={24} aria-hidden="true" />
               <motion.span
                 key={dislikes}
                 initial={{ scale: 1.5, opacity: 0 }}
@@ -175,7 +177,7 @@ const DealCard = ({ deal, onUpdate }) => {
             className="mt-2 bg-blue-500 text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
             aria-label="Open in Google Maps"
           >
-            <MapPin className="w-5 h-5" />
+            <MapPin className="w-5 h-5" aria-hidden="true" />
           </button>
         )}
       </div>
