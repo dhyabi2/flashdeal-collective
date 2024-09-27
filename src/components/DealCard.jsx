@@ -109,11 +109,11 @@ const DealCard = ({ deal, onUpdate }) => {
         <h2 className="text-xl font-semibold mb-2 font-serif text-gray-800 dark:text-gray-200">{deal.title}</h2>
         <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">{deal.category}</div>
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <Clock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
-            <span className="text-sm font-medium text-indigo-600 dark:text-indigo-300">{timeLeft}</span>
+          <div className="flex items-center space-x-2 bg-indigo-100 dark:bg-indigo-900 rounded-full px-4 py-2">
+            <Clock className="w-6 h-6 text-indigo-500 dark:text-indigo-400" />
+            <span className="text-lg font-bold text-indigo-600 dark:text-indigo-300">{timeLeft}</span>
           </div>
-          <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <div className="text-sm font-semibold text-gray-500 dark:text-gray-400">
             {progress > 0 ? `${Math.round(progress)}% left` : 'Expired'}
           </div>
         </div>
@@ -130,40 +130,46 @@ const DealCard = ({ deal, onUpdate }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('likes') && handleVote('likes')}
-            className={`flex items-center ${
-              canVote('likes') ? 'text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-300' : 'text-gray-400 dark:text-gray-500'
+            className={`flex items-center justify-center w-16 h-16 rounded-full ${
+              canVote('likes') ? 'bg-green-100 text-green-500 hover:bg-green-200 dark:bg-green-900 dark:text-green-400 dark:hover:bg-green-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('likes')}
           >
-            <ThumbsUp className="mr-1" size={18} />
-            <motion.span
-              key={likes}
-              initial={{ scale: 1.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            >
-              {likes}
-            </motion.span>
+            <div className="flex flex-col items-center">
+              <ThumbsUp className="mb-1" size={24} />
+              <motion.span
+                key={likes}
+                initial={{ scale: 1.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                className="text-sm font-bold"
+              >
+                {likes}
+              </motion.span>
+            </div>
           </motion.button>
           <ShareLink title={deal.title} url={shareUrl} />
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('dislikes') && handleVote('dislikes')}
-            className={`flex items-center ${
-              canVote('dislikes') ? 'text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300' : 'text-gray-400 dark:text-gray-500'
+            className={`flex items-center justify-center w-16 h-16 rounded-full ${
+              canVote('dislikes') ? 'bg-red-100 text-red-500 hover:bg-red-200 dark:bg-red-900 dark:text-red-400 dark:hover:bg-red-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('dislikes')}
           >
-            <ThumbsDown className="mr-1" size={18} />
-            <motion.span
-              key={dislikes}
-              initial={{ scale: 1.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            >
-              {dislikes}
-            </motion.span>
+            <div className="flex flex-col items-center">
+              <ThumbsDown className="mb-1" size={24} />
+              <motion.span
+                key={dislikes}
+                initial={{ scale: 1.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                className="text-sm font-bold"
+              >
+                {dislikes}
+              </motion.span>
+            </div>
           </motion.button>
         </div>
       </div>
