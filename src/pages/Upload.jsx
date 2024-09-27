@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Upload as UploadIcon, Clock, ChevronDown } from 'lucide-react';
 import { addDeal } from '../utils/indexedDB';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Upload = () => {
   const [title, setTitle] = useState('');
@@ -12,6 +13,7 @@ const Upload = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
+  const { translations } = useLanguage();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -61,10 +63,10 @@ const Upload = () => {
         className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden max-w-md w-full"
       >
         <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">Create Flash Deal</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">{translations.createFlashDeal}</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title (max 10 words)</label>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.title} (max 10 words)</label>
               <input
                 type="text"
                 id="title"
@@ -72,16 +74,16 @@ const Upload = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 required
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                placeholder="Enter deal title"
+                placeholder={translations.enterDealTitle}
               />
             </div>
             <div className="relative">
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.category}</label>
               <div
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200 cursor-pointer flex justify-between items-center"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <span>{category}</span>
+                <span>{translations[category.toLowerCase()]}</span>
                 <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${isDropdownOpen ? 'transform rotate-180' : ''}`} />
               </div>
               {isDropdownOpen && (
@@ -101,25 +103,25 @@ const Upload = () => {
                         setIsDropdownOpen(false);
                       }}
                     >
-                      {cat}
+                      {translations[cat.toLowerCase()]}
                     </div>
                   ))}
                 </motion.div>
               )}
             </div>
             <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Image</label>
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.image}</label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg">
                 <div className="space-y-1 text-center">
                   <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="flex text-sm text-gray-600 dark:text-gray-400">
                     <label htmlFor="image" className="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                      <span>Upload a file</span>
+                      <span>{translations.uploadFile}</span>
                       <input id="image" name="image" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" required />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
+                    <p className="pl-1">{translations.dragDrop}</p>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{translations.imageTypes}</p>
                 </div>
               </div>
               {imageBase64 && (
@@ -129,18 +131,18 @@ const Upload = () => {
               )}
             </div>
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location}</label>
               <input
                 type="text"
                 id="location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                placeholder="Enter location"
+                placeholder={translations.enterLocation}
               />
             </div>
             <div>
-              <label htmlFor="duration" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration (hours)</label>
+              <label htmlFor="duration" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.duration}</label>
               <div className="flex items-center">
                 <Clock className="h-5 w-5 text-gray-400 mr-2" />
                 <input
@@ -159,7 +161,7 @@ const Upload = () => {
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
             >
-              Create Flash Deal
+              {translations.create}
             </button>
           </form>
         </div>

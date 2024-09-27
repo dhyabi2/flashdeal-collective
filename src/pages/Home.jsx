@@ -9,6 +9,7 @@ import SortingTabs from '../components/SortingTabs';
 import PullToRefresh from 'react-pull-to-refresh';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { sortDeals } from '../utils/dealUtils';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Home = () => {
   const [deals, setDeals] = useState([]);
@@ -18,6 +19,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('newest');
+  const { translations } = useLanguage();
 
   const fetchDeals = async (pageNum = 1) => {
     setIsLoading(true);
@@ -85,8 +87,8 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
       <Header />
       <div className="container mx-auto px-4 py-2">
-        <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
-        <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} />
+        <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} translations={translations} />
+        <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} translations={translations} />
       </div>
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll
@@ -98,7 +100,7 @@ const Home = () => {
               <DealCardSkeleton key={index} />
             ))}
           </div>}
-          endMessage={<p className="text-center mt-4 text-gray-600 dark:text-gray-400">No more deals to show</p>}
+          endMessage={<p className="text-center mt-4 text-gray-600 dark:text-gray-400">{translations.noMoreDeals}</p>}
         >
           <div className="container mx-auto px-4 py-4 relative z-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -108,7 +110,7 @@ const Home = () => {
                 ))
               ) : (
                 filteredDeals.map((deal) => (
-                  <DealCard key={deal.id} deal={deal} onUpdate={handleDealUpdate} />
+                  <DealCard key={deal.id} deal={deal} onUpdate={handleDealUpdate} translations={translations} />
                 ))
               )}
             </div>
