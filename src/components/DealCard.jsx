@@ -78,6 +78,7 @@ const DealCard = ({ deal, onUpdate }) => {
       <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-2 font-serif text-gray-800 dark:text-gray-200">{deal.title}</h2>
+        <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">{deal.category}</div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
             <Clock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />

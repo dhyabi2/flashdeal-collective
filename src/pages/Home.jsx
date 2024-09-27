@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { getAllDeals, generateDummyData } from '../utils/indexedDB';
 import DealCard from '../components/DealCard';
 import DealCardSkeleton from '../components/DealCardSkeleton';
@@ -54,15 +53,6 @@ const Home = () => {
     ));
   };
 
-  const handleSearch =
- (searchTerm) => {
-    const filtered = deals.filter(deal => 
-      deal.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedCategory === 'All' || deal.category === selectedCategory)
-    );
-    setFilteredDeals(filtered);
-  };
-
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     const filtered = deals.filter(deal => 
@@ -85,7 +75,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-16 pb-20">
-      <Header onSearch={handleSearch} />
+      <Header />
       <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll

@@ -6,6 +6,7 @@ const Upload = () => {
   const [title, setTitle] = useState('');
   const [imageBase64, setImageBase64] = useState('');
   const [duration, setDuration] = useState(24);
+  const [category, setCategory] = useState('Electronics'); // New state for category
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -33,6 +34,7 @@ const Upload = () => {
       const newDeal = {
         title,
         imageBase64,
+        category, // Include category in the new deal
         expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
         likes: 0,
         dislikes: 0,
@@ -59,6 +61,21 @@ const Upload = () => {
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
           />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+          >
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Home">Home</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Sports">Sports</option>
+          </select>
         </div>
         <div className="mb-4">
           <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Image (PNG only)</label>
