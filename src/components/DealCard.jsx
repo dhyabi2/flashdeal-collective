@@ -3,6 +3,7 @@ import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { updateDeal } from '../utils/indexedDB';
 import { motion } from 'framer-motion';
 import { getUserIP } from '../utils/ipUtils';
+import ShareLink from './ShareLink';
 
 const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -108,6 +109,7 @@ const DealCard = ({ deal, onUpdate }) => {
           >
             <ThumbsUp className="mr-1" size={18} /> {likes}
           </motion.button>
+          <ShareLink dealId={deal.id} />
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
