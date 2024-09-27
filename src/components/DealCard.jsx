@@ -72,6 +72,7 @@ const DealCard = ({ deal, onUpdate }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.05 }}
       className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
@@ -82,13 +83,17 @@ const DealCard = ({ deal, onUpdate }) => {
           <p className="text-sm text-gray-600">{timeLeft}</p>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-          <div
+          <motion.div
             className="bg-blue-600 h-2.5 rounded-full"
-            style={{ width: `${progress}%` }}
-          ></div>
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.5 }}
+          ></motion.div>
         </div>
         <div className="flex justify-between items-center">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => canVote('likes') && handleVote('likes')}
             className={`flex items-center ${
               canVote('likes') ? 'text-green-500 hover:text-green-600' : 'text-gray-400'
@@ -96,8 +101,10 @@ const DealCard = ({ deal, onUpdate }) => {
             disabled={!canVote('likes')}
           >
             <ThumbsUp className="mr-1" size={18} /> {likes}
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => canVote('dislikes') && handleVote('dislikes')}
             className={`flex items-center ${
               canVote('dislikes') ? 'text-red-500 hover:text-red-600' : 'text-gray-400'
@@ -105,7 +112,7 @@ const DealCard = ({ deal, onUpdate }) => {
             disabled={!canVote('dislikes')}
           >
             <ThumbsDown className="mr-1" size={18} /> {dislikes}
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.div>
