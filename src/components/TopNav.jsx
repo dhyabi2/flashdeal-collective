@@ -10,7 +10,7 @@ const TopNav = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-border z-10">
       <div className="container mx-auto px-4 py-2 flex justify-end">
-        <div className="space-x-2">
+        <div className="space-x-2 flex items-center">
           <button
             onClick={() => setTheme('light')}
             className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -27,11 +27,11 @@ const TopNav = () => {
           </button>
           <button
             onClick={toggleLanguage}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center"
             aria-label="Toggle language"
           >
             <Globe size={20} />
-            <span className="ml-1">{language.toUpperCase()}</span>
+            <span className="ml-1">{language === 'ar' ? 'ع' : 'EN'}</span>
           </button>
         </div>
       </div>

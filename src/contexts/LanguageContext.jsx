@@ -1,14 +1,21 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const LanguageContext = createContext();
 
 export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState(() => {
+    const savedLanguage = localStorage.getItem('language');
+    return savedLanguage || 'ar'; // Default to Arabic if no saved preference
+  });
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
 
   const toggleLanguage = () => {
-    setLanguage(prevLang => prevLang === 'en' ? 'es' : 'en');
+    setLanguage(prevLang => prevLang === 'ar' ? 'en' : 'ar');
   };
 
   const translations = {
@@ -42,35 +49,35 @@ export const LanguageProvider = ({ children }) => {
       titleAndImageRequired: 'Title and image are mandatory',
       failedToAddDeal: 'Failed to add deal. Please try again.',
     },
-    es: {
-      home: 'Inicio',
-      addDeal: 'Añadir Oferta',
-      createFlashDeal: 'Crear Oferta Relámpago',
-      title: 'Título',
-      enterDealTitle: 'Ingrese el título de la oferta',
-      category: 'Categoría',
-      image: 'Imagen',
-      uploadFile: 'Subir un archivo',
-      dragDrop: 'o arrastrar y soltar',
-      imageTypes: 'PNG, JPG, GIF hasta 10MB',
-      location: 'Ubicación',
-      enterLocation: 'Ingrese la ubicación',
-      duration: 'Duración (horas)',
-      create: 'Crear Oferta Relámpago',
-      newest: 'Más Recientes',
-      expiringSoon: 'A Punto de Expirar',
-      mostLiked: 'Más Gustados',
-      noMoreDeals: 'No hay más ofertas para mostrar',
-      electronics: 'Electrónica',
-      fashion: 'Moda',
-      home: 'Hogar',
-      beauty: 'Belleza',
-      sports: 'Deportes',
-      addedBy: 'Añadido Por',
-      enterAddedBy: 'Ingrese su nombre',
-      titleTooLong: 'El título debe tener 10 palabras o menos',
-      titleAndImageRequired: 'El título y la imagen son obligatorios',
-      failedToAddDeal: 'No se pudo añadir la oferta. Por favor, inténtelo de nuevo.',
+    ar: {
+      home: 'الرئيسية',
+      addDeal: 'إضافة صفقة',
+      createFlashDeal: 'إنشاء صفقة سريعة',
+      title: 'العنوان',
+      enterDealTitle: 'أدخل عنوان الصفقة',
+      category: 'الفئة',
+      image: 'الصورة',
+      uploadFile: 'تحميل ملف',
+      dragDrop: 'أو اسحب وأفلت',
+      imageTypes: 'PNG، JPG، GIF حتى 10 ميجابايت',
+      location: 'الموقع',
+      enterLocation: 'أدخل الموقع',
+      duration: 'المدة (بالساعات)',
+      create: 'إنشاء صفقة سريعة',
+      newest: 'الأحدث',
+      expiringSoon: 'تنتهي قريبًا',
+      mostLiked: 'الأكثر إعجابًا',
+      noMoreDeals: 'لا توجد المزيد من الصفقات لعرضها',
+      electronics: 'إلكترونيات',
+      fashion: 'أزياء',
+      home: 'المنزل',
+      beauty: 'الجمال',
+      sports: 'رياضة',
+      addedBy: 'أضيف بواسطة',
+      enterAddedBy: 'أدخل اسمك',
+      titleTooLong: 'يجب أن يكون العنوان 10 كلمات أو أقل',
+      titleAndImageRequired: 'العنوان والصورة إلزاميان',
+      failedToAddDeal: 'فشل في إضافة الصفقة. يرجى المحاولة مرة أخرى.',
     },
   };
 
