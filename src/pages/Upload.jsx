@@ -227,9 +227,9 @@ const Upload = () => {
                   type="number"
                   id="duration"
                   value={duration}
-                  onChange={(e) => setDuration(parseInt(e.target.value))}
+                  onChange={(e) => setDuration(Math.min(168, Math.max(1, parseInt(e.target.value))))}
                   min="1"
-                  max="72"
+                  max="168"
                   required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
                 />
