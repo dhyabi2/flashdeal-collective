@@ -50,15 +50,20 @@ export const deleteExpiredDeals = async () => {
   const tx = db.transaction(storeName, 'readwrite');
   const store = tx.objectStore(storeName);
   const now = new Date().toISOString();
-  const expiredDeals = await store.index('expiresAt').getAllKeys(IDBKeyRange.upperBound(now));
-  
-  for (const key of expiredDeals) {
-    await store.delete(key);
+  let deletedCount = 0;
+
+  let cursor = await store.openCursor();
+  while (cursor) {
+    if (cursor.value.expiresAt < now) {
+      await cursor.delete();
+      deletedCount++;
+    }
+    cursor = await cursor.continue();
   }
-  
+
   await tx.done;
-  console.log(`Deleted ${expiredDeals.length} expired deals`);
-  return expiredDeals.length;
+  console.log(`Deleted ${deletedCount} expired deals`);
+  return deletedCount;
 };
 
 // Generate dummy data if IndexedDB fails
