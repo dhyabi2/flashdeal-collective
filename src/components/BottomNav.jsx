@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, PlusCircle } from 'lucide-react';
+import { Home, PlusCircle, Globe } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const BottomNav = () => {
   const location = useLocation();
+  const { language, toggleLanguage } = useLanguage();
 
   const navItems = [
     { path: '/', icon: Home, label: 'Home' },
@@ -26,6 +28,14 @@ const BottomNav = () => {
             <Icon size={28} />
           </Link>
         ))}
+        <button
+          onClick={toggleLanguage}
+          className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+          aria-label="Toggle language"
+        >
+          <Globe size={28} />
+          <span className="sr-only">{language === 'ar' ? 'ع' : 'EN'}</span>
+        </button>
       </div>
     </nav>
   );
