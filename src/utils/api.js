@@ -26,3 +26,8 @@ export const generateDummyData = async () => {
   const response = await axios.post(`${API_BASE_URL}/api/deals/dummy`);
   return response.data;
 };
+
+export const getDealById = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/api/deals/${id}`);
+  return response.data;
+};

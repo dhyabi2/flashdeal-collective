@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Home from "./pages/Home";
 import Upload from "./pages/Upload";
+import SharedDealPage from "./pages/SharedDealPage";
 import BottomNav from "./components/BottomNav";
 import TopNav from "./components/TopNav";
 
@@ -24,6 +25,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/upload" element={<Upload />} />
+                  <Route path="/deal/:id" element={<SharedDealPage />} />
                 </Routes>
               </div>
               <BottomNav />
