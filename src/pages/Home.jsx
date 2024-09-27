@@ -82,9 +82,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-16 pb-20 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
       <Header />
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-2">
         <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
         <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} />
       </div>
@@ -100,7 +100,7 @@ const Home = () => {
           </div>}
           endMessage={<p className="text-center mt-4 text-gray-600 dark:text-gray-400">No more deals to show</p>}
         >
-          <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className="container mx-auto px-4 py-4 relative z-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {isLoading ? (
                 [...Array(8)].map((_, index) => (
