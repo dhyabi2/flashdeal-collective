@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, Palette } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 const TopNav = () => {
@@ -22,13 +22,6 @@ const TopNav = () => {
             aria-label="Dark mode"
           >
             <Moon size={20} />
-          </button>
-          <button
-            onClick={() => setTheme('neon')}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
-            aria-label="Neon mode"
-          >
-            <Palette size={20} />
           </button>
         </div>
       </div>
