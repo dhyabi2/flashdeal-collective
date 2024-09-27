@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThumbsUp, ThumbsDown, Clock, MapPin, DollarSign } from 'lucide-react';
-import { updateDeal } from '../utils/indexedDB';
 import { motion, AnimatePresence } from 'framer-motion';
+import { updateDeal } from '../utils/indexedDB';
 import { getUserIP } from '../utils/ipUtils';
 import ShareLink from './ShareLink';
 import useSwipe from '../hooks/useSwipe';
+import { playSoundEffect } from '../utils/soundEffects';
 
 const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -50,6 +51,7 @@ const DealCard = ({ deal, onUpdate }) => {
   useEffect(() => {
     if (swipeDirection) {
       setShowDetails(true);
+      playSoundEffect('swipe');
     }
   }, [swipeDirection]);
 
@@ -69,6 +71,7 @@ const DealCard = ({ deal, onUpdate }) => {
       }
       
       onUpdate(updatedDeal);
+      playSoundEffect('vote');
     } catch (error) {
       console.error(`Error updating ${voteType}:`, error);
     }
@@ -120,7 +123,15 @@ const DealCard = ({ deal, onUpdate }) => {
             } transition-colors duration-200`}
             disabled={!canVote('likes')}
           >
-            <ThumbsUp className="mr-1" size={18} /> {likes}
+            <ThumbsUp className="mr-1" size={18} />
+            <motion.span
+              key={likes}
+              initial={{ scale: 1.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            >
+              {likes}
+            </motion.span>
           </motion.button>
           <ShareLink title={deal.title} url={shareUrl} />
           <motion.button
@@ -132,7 +143,15 @@ const DealCard = ({ deal, onUpdate }) => {
             } transition-colors duration-200`}
             disabled={!canVote('dislikes')}
           >
-            <ThumbsDown className="mr-1" size={18} /> {dislikes}
+            <ThumbsDown className="mr-1" size={18} />
+            <motion.span
+              key={dislikes}
+              initial={{ scale: 1.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            >
+              {dislikes}
+            </motion.span>
           </motion.button>
         </div>
       </div>
