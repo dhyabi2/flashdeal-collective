@@ -12,7 +12,7 @@ const Upload = () => {
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
-  const [addedBy, setAddedBy] = useState(''); // New state for "Add By" field
+  const [addedBy, setAddedBy] = useState('');
   const navigate = useNavigate();
   const { translations } = useLanguage();
 
@@ -45,8 +45,8 @@ const Upload = () => {
         expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
         likes: 0,
         dislikes: 0,
-        location,
-        addedBy, // Include the new "Add By" field
+        location: location || null, // Make location optional
+        addedBy: addedBy || null, // Make addedBy optional
       };
       await addDeal(newDeal);
       navigate('/');
@@ -133,7 +133,7 @@ const Upload = () => {
               )}
             </div>
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location}</label>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} (Optional)</label>
               <input
                 type="text"
                 id="location"
@@ -144,7 +144,7 @@ const Upload = () => {
               />
             </div>
             <div>
-              <label htmlFor="addedBy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.addedBy}</label>
+              <label htmlFor="addedBy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.addedBy} (Optional)</label>
               <input
                 type="text"
                 id="addedBy"
