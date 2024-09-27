@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Clock, MapPin, DollarSign } from 'lucide-react';
 import { updateDeal } from '../utils/indexedDB';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getUserIP } from '../utils/ipUtils';
@@ -12,6 +12,7 @@ const DealCard = ({ deal, onUpdate }) => {
   const [dislikes, setDislikes] = useState(deal.dislikes || 0);
   const [progress, setProgress] = useState(100);
   const [userIP, setUserIP] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
   const cardRef = useRef(null);
   const swipeDirection = useSwipe(cardRef);
 
@@ -45,6 +46,12 @@ const DealCard = ({ deal, onUpdate }) => {
 
     return () => clearInterval(timer);
   }, [deal.expiresAt, deal.createdAt]);
+
+  useEffect(() => {
+    if (swipeDirection) {
+      setShowDetails(true);
+    }
+  }, [swipeDirection]);
 
   const handleVote = async (voteType) => {
     if (!userIP) return;
@@ -130,16 +137,24 @@ const DealCard = ({ deal, onUpdate }) => {
         </div>
       </div>
       <AnimatePresence>
-        {swipeDirection && (
+        {showDetails && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gray-100 dark:bg-gray-700 p-4 rounded-b-lg"
           >
-            <p className="text-white text-2xl font-serif tracking-wide">
-              Swipe for more details
-            </p>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">More Details</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-2">{deal.description}</p>
+            <div className="flex items-center text-gray-600 dark:text-gray-300 mb-1">
+              <DollarSign className="w-4 h-4 mr-2" />
+              <span>{deal.price}</span>
+            </div>
+            <div className="flex items-center text-gray-600 dark:text-gray-300">
+              <MapPin className="w-4 h-4 mr-2" />
+              <span>{deal.location}</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
