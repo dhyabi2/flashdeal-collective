@@ -65,7 +65,7 @@ export const LanguageProvider = ({ children }) => {
     ar: {
       home: 'الرئيسية',
       addDeal: 'إضافة صفقة',
-      createFlashDeal: 'إنشاء عوض سريع', // Updated translation here
+      createFlashDeal: 'إنشاء عرض سريع', // Updated translation here
       title: 'العنوان',
       enterDealTitle: 'أدخل عنوان الصفقة',
       category: 'الفئة',
