@@ -77,11 +77,19 @@ const Upload = () => {
       map.locate();
     }, [map]);
 
-    map.on('locationfound', (e) => {
-      setMapPosition([e.latlng.lat, e.latlng.lng]);
-      setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
-      map.flyTo(e.latlng, map.getZoom());
-    });
+    useEffect(() => {
+      const onLocationFound = (e) => {
+        setMapPosition([e.latlng.lat, e.latlng.lng]);
+        setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
+        map.flyTo(e.latlng, map.getZoom());
+      };
+
+      map.on('locationfound', onLocationFound);
+
+      return () => {
+        map.off('locationfound', onLocationFound);
+      };
+    }, [map]);
 
     return mapPosition ? <Marker position={mapPosition} /> : null;
   };
