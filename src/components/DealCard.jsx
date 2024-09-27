@@ -16,13 +16,15 @@ const DealCard = ({ deal, onUpdate }) => {
   const [showDetails, setShowDetails] = useState(false);
   const queryClient = useQueryClient();
 
-  const openInGoogleMaps = () => {
-    if (deal.location) {
-      const [lat, lng] = deal.location.split(',');
-      const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-      window.open(url, '_blank');
-    }
-  };
+  const updateDealMutation = useMutation({
+    mutationFn: (updates) => updateDeal(deal.id, updates),
+    onSuccess: (updatedDeal) => {
+      queryClient.setQueryData(['deals'], old => 
+        old.map(d => d.id === updatedDeal.id ? updatedDeal : d)
+      );
+      onUpdate(updatedDeal);
+    },
+  });
 
   useEffect(() => {
     const fetchUserIP = async () => {
@@ -81,6 +83,8 @@ const DealCard = ({ deal, onUpdate }) => {
     return !(deal[`${voteType}IPs`] || []).includes(userIP);
   };
 
+  const shareUrl = `${window.location.origin}/deal/${deal.id}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -110,15 +114,6 @@ const DealCard = ({ deal, onUpdate }) => {
             transition={{ duration: 0.5 }}
           ></motion.div>
         </div>
-        {deal.location && (
-          <button
-            onClick={openInGoogleMaps}
-            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-          >
-            <MapPin className="w-4 h-4 mr-2" />
-            Open in Google Maps
-          </button>
-        )}
         <div className="flex justify-between items-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -189,7 +184,6 @@ const DealCard = ({ deal, onUpdate }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      </div>
     </motion.div>
   );
 };
