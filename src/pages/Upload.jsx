@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Upload as UploadIcon, Clock, ChevronDown, MapPin } from 'lucide-react';
 import { addDeal } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, LayersControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const Upload = () => {
@@ -66,11 +66,21 @@ const Upload = () => {
   };
 
   const LocationMarker = () => {
-    useMapEvents({
+    const map = useMapEvents({
       click(e) {
         setMapPosition([e.latlng.lat, e.latlng.lng]);
         setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
       },
+    });
+
+    useEffect(() => {
+      map.locate();
+    }, [map]);
+
+    map.on('locationfound', (e) => {
+      setMapPosition([e.latlng.lat, e.latlng.lng]);
+      setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
+      map.flyTo(e.latlng, map.getZoom());
     });
 
     return mapPosition ? <Marker position={mapPosition} /> : null;
@@ -156,7 +166,14 @@ const Upload = () => {
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} ({translations.optional})</label>
               <div className="mt-1">
                 <MapContainer center={[0, 0]} zoom={2} style={{ height: '200px', width: '100%' }}>
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <LayersControl position="topright">
+                    <LayersControl.BaseLayer checked name="OpenStreetMap">
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="Satellite">
+                      <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
+                    </LayersControl.BaseLayer>
+                  </LayersControl>
                   <LocationMarker />
                 </MapContainer>
               </div>

@@ -134,19 +134,4 @@ app.listen(PORT, () => {
 });
 ```
 
-To use this script:
-
-1. Save it as `app.js` in your project directory.
-2. Install necessary dependencies:
-   ```
-   npm init -y
-   npm install express
-   ```
-3. Run the script:
-   ```
-   node app.js
-   ```
-
-This script provides a basic API for the Flash Deals application, including endpoints for adding, retrieving, and updating deals. It also includes the daily cleanup functionality to delete expired deals.
-
-Note: This is a basic implementation and doesn't include error handling, input validation, or security measures that would be necessary for a production application. In a real-world scenario, you'd want to add proper error handling, input validation, authentication, and potentially use a more robust database solution.
+This script now handles the location data when adding a new deal. The location will be stored as a string in the format "latitude,longitude" in the deal object.
