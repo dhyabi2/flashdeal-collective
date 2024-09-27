@@ -1,11 +1,14 @@
 import React from 'react';
 import { Clock, ThumbsUp, Sparkles } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SortingTabs = ({ activeSort, onSortChange }) => {
+  const { translations } = useLanguage();
+
   const sortOptions = [
-    { id: 'newest', icon: Sparkles, label: 'Newest' },
-    { id: 'expiringSoon', icon: Clock, label: 'Expiring Soon' },
-    { id: 'mostLiked', icon: ThumbsUp, label: 'Most Liked' },
+    { id: 'newest', icon: Sparkles, label: translations.newest },
+    { id: 'expiringSoon', icon: Clock, label: translations.expiringSoon },
+    { id: 'mostLiked', icon: ThumbsUp, label: translations.mostLiked },
   ];
 
   return (

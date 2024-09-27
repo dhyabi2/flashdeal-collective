@@ -1,15 +1,18 @@
 import React from 'react';
 import { Home, Smartphone, ShoppingBag, Shirt, Dumbbell } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const categories = [
-  { name: 'All', icon: Home },
-  { name: 'Electronics', icon: Smartphone },
-  { name: 'Fashion', icon: Shirt },
-  { name: 'Home', icon: ShoppingBag },
-  { name: 'Sports', icon: Dumbbell },
+  { name: 'all', icon: Home },
+  { name: 'electronics', icon: Smartphone },
+  { name: 'fashion', icon: Shirt },
+  { name: 'home', icon: ShoppingBag },
+  { name: 'sports', icon: Dumbbell },
 ];
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory }) => {
+  const { translations } = useLanguage();
+
   return (
     <div className="flex flex-wrap justify-center gap-2 mb-6">
       {categories.map(({ name, icon: Icon }) => (
@@ -23,7 +26,7 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory }) => {
           }`}
         >
           <Icon size={18} className="mr-2" />
-          {name}
+          {translations[name]}
         </button>
       ))}
     </div>
