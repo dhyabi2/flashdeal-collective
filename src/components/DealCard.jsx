@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThumbsUp, ThumbsDown, Clock, MapPin, DollarSign } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { updateDeal } from '../utils/api';
 import { getUserIP } from '../utils/ipUtils';
 import ShareLink from './ShareLink';
-import useSwipe from '../hooks/useSwipe';
 import { playSoundEffect } from '../utils/soundEffects';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -15,8 +14,6 @@ const DealCard = ({ deal, onUpdate }) => {
   const [progress, setProgress] = useState(100);
   const [userIP, setUserIP] = useState('');
   const [showDetails, setShowDetails] = useState(false);
-  const cardRef = useRef(null);
-  const swipeDirection = useSwipe(cardRef);
   const queryClient = useQueryClient();
 
   const updateDealMutation = useMutation({
@@ -60,13 +57,6 @@ const DealCard = ({ deal, onUpdate }) => {
     return () => clearInterval(timer);
   }, [deal.expiresAt, deal.createdAt]);
 
-  useEffect(() => {
-    if (swipeDirection) {
-      setShowDetails(true);
-      playSoundEffect('swipe');
-    }
-  }, [swipeDirection]);
-
   const handleVote = async (voteType) => {
     if (!userIP) return;
 
@@ -97,7 +87,6 @@ const DealCard = ({ deal, onUpdate }) => {
 
   return (
     <motion.div
-      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
