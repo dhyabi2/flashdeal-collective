@@ -8,16 +8,10 @@ import Home from "./pages/Home";
 import Upload from "./pages/Upload";
 import BottomNav from "./components/BottomNav";
 import TopNav from "./components/TopNav";
-import { setupDailyCleanup } from "./utils/dealCleanup";
-import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  useEffect(() => {
-    setupDailyCleanup();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

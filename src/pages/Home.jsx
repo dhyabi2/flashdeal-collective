@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllDeals, generateDummyData } from '../utils/indexedDB';
+import { getAllDeals, generateDummyData } from '../utils/api';
 import DealCard from '../components/DealCard';
 import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
@@ -10,57 +10,40 @@ import PullToRefresh from 'react-pull-to-refresh';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { sortDeals } from '../utils/dealUtils';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const Home = () => {
-  const [deals, setDeals] = useState([]);
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('newest');
   const { translations } = useLanguage();
+  const queryClient = useQueryClient();
 
-  const fetchDeals = async (pageNum = 1) => {
-    setIsLoading(true);
-    try {
-      const fetchedDeals = await getAllDeals(pageNum);
-      if (pageNum === 1) {
-        setDeals(fetchedDeals);
-        setFilteredDeals(fetchedDeals);
-      } else {
-        setDeals(prevDeals => [...prevDeals, ...fetchedDeals]);
-        setFilteredDeals(prevDeals => [...prevDeals, ...fetchedDeals]);
-      }
-      setHasMore(fetchedDeals.length > 0);
-    } catch (error) {
-      console.error('Error fetching deals:', error);
-      if (pageNum === 1) {
-        const dummyData = generateDummyData();
-        setDeals(dummyData);
-        setFilteredDeals(dummyData);
-      }
-    } finally {
-      setIsLoading(false);
+  const { data: deals, isLoading, error } = useQuery({
+    queryKey: ['deals'],
+    queryFn: getAllDeals,
+    onError: () => {
+      generateDummyData();
+    },
+  });
+
+  useEffect(() => {
+    if (deals) {
+      const filtered = deals.filter(deal => 
+        selectedCategory === 'All' || deal.category === selectedCategory
+      );
+      const sorted = sortDeals(filtered, sortOption);
+      setFilteredDeals(sorted);
+      setHasMore(false); // Since we're getting all deals at once
     }
-  };
-
-  useEffect(() => {
-    fetchDeals();
-  }, []);
-
-  useEffect(() => {
-    const filtered = deals.filter(deal => 
-      selectedCategory === 'All' || deal.category === selectedCategory
-    );
-    const sorted = sortDeals(filtered, sortOption);
-    setFilteredDeals(sorted);
   }, [deals, selectedCategory, sortOption]);
 
   const handleDealUpdate = (updatedDeal) => {
-    setDeals(prevDeals => prevDeals.map(deal => 
-      deal.id === updatedDeal.id ? updatedDeal : deal
-    ));
+    queryClient.setQueryData(['deals'], old => 
+      old.map(deal => deal.id === updatedDeal.id ? updatedDeal : deal)
+    );
   };
 
   const handleCategorySelect = (category) => {
@@ -72,16 +55,13 @@ const Home = () => {
   };
 
   const handleRefresh = async () => {
-    setPage(1);
-    await fetchDeals(1);
+    await queryClient.invalidateQueries(['deals']);
     return null;
   };
 
-  const loadMoreDeals = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchDeals(nextPage);
-  };
+  if (error) {
+    return <div>Error loading deals. Please try again later.</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
@@ -93,7 +73,7 @@ const Home = () => {
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll
           dataLength={filteredDeals.length}
-          next={loadMoreDeals}
+          next={() => {}} // We're not implementing pagination for now
           hasMore={hasMore}
           loader={<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, index) => (

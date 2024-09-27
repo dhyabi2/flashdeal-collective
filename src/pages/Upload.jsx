@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload as UploadIcon, Clock, ChevronDown } from 'lucide-react';
-import { addDeal } from '../utils/indexedDB';
+import { addDeal } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const Upload = () => {
   const [title, setTitle] = useState('');
@@ -15,6 +16,19 @@ const Upload = () => {
   const [addedBy, setAddedBy] = useState('');
   const navigate = useNavigate();
   const { translations } = useLanguage();
+  const queryClient = useQueryClient();
+
+  const addDealMutation = useMutation({
+    mutationFn: addDeal,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['deals']);
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('Error adding deal:', error);
+      alert(translations.failedToAddDeal);
+    },
+  });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -37,24 +51,17 @@ const Upload = () => {
       alert(translations.titleAndImageRequired);
       return;
     }
-    try {
-      const newDeal = {
-        title,
-        imageBase64,
-        category,
-        expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
-        likes: 0,
-        dislikes: 0,
-        location: location || null,
-        addedBy: addedBy || null,
-      };
-      await addDeal(newDeal);
-      navigate('/');
-    } catch (error) {
-      console.error('Error adding deal:', error);
-      alert(translations.failedToAddDeal);
-    }
+    const newDeal = {
+      title,
+      imageBase64,
+      category,
+      expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
+      location: location || null,
+      addedBy: addedBy || null,
+    };
+    addDealMutation.mutate(newDeal);
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-gray-900 dark:to-indigo-900 flex items-center justify-center px-4 py-12">
@@ -180,6 +187,11 @@ const Upload = () => {
         </div>
       </motion.div>
     </div>
+  );
+};
+
+  return (
+    // ... JSX remains the same
   );
 };
 

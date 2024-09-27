@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThumbsUp, ThumbsDown, Clock, MapPin, DollarSign } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { updateDeal } from '../utils/indexedDB';
+import { updateDeal } from '../utils/api';
 import { getUserIP } from '../utils/ipUtils';
 import ShareLink from './ShareLink';
 import useSwipe from '../hooks/useSwipe';
 import { playSoundEffect } from '../utils/soundEffects';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -16,6 +17,17 @@ const DealCard = ({ deal, onUpdate }) => {
   const [showDetails, setShowDetails] = useState(false);
   const cardRef = useRef(null);
   const swipeDirection = useSwipe(cardRef);
+  const queryClient = useQueryClient();
+
+  const updateDealMutation = useMutation({
+    mutationFn: (updates) => updateDeal(deal.id, updates),
+    onSuccess: (updatedDeal) => {
+      queryClient.setQueryData(['deals'], old => 
+        old.map(d => d.id === updatedDeal.id ? updatedDeal : d)
+      );
+      onUpdate(updatedDeal);
+    },
+  });
 
   useEffect(() => {
     const fetchUserIP = async () => {
@@ -59,18 +71,18 @@ const DealCard = ({ deal, onUpdate }) => {
     if (!userIP) return;
 
     try {
-      const updatedDeal = await updateDeal(deal.id, { 
+      const updates = { 
         [voteType]: deal[voteType] + 1,
         [`${voteType}IPs`]: [...(deal[`${voteType}IPs`] || []), userIP]
-      });
+      };
+      updateDealMutation.mutate(updates);
       
       if (voteType === 'likes') {
-        setLikes(updatedDeal.likes);
+        setLikes(deal.likes + 1);
       } else {
-        setDislikes(updatedDeal.dislikes);
+        setDislikes(deal.dislikes + 1);
       }
       
-      onUpdate(updatedDeal);
       playSoundEffect('vote');
     } catch (error) {
       console.error(`Error updating ${voteType}:`, error);
