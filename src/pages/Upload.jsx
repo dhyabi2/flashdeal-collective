@@ -15,7 +15,7 @@ const Upload = () => {
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
-  const [mapPosition, setMapPosition] = useState(null);
+  const [mapPosition, setMapPosition] = useState([23.455757859961103, 58.51593263609126]);
   const [addedBy, setAddedBy] = useState('');
   const navigate = useNavigate();
   const { translations } = useLanguage();
@@ -186,7 +186,7 @@ const Upload = () => {
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} ({translations.optional})</label>
               <div className="mt-1">
-                <MapContainer center={mapPosition || [0, 0]} zoom={mapPosition ? 13 : 2} style={{ height: '200px', width: '100%' }}>
+                <MapContainer center={mapPosition} zoom={4} style={{ height: '200px', width: '100%' }}>
                   <LayersControl position="topright">
                     <LayersControl.BaseLayer checked name="OpenStreetMap">
                       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
