@@ -83,7 +83,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-16 pb-20 relative overflow-hidden">
-      <div className="animated-bg"></div>
       <Header />
       <div className="container mx-auto px-4 py-4">
         <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
