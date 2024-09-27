@@ -59,7 +59,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        arabic: ['Noto Kufi Arabic', 'sans-serif'], // Added elegant Arabic font
+        arabic: ['Vazirmatn', 'sans-serif'], // Updated Arabic font
       },
       keyframes: {
         "accordion-down": {
