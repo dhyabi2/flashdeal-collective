@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload as UploadIcon, Clock, ChevronDown } from 'lucide-react';
+import { Upload as UploadIcon, Clock, ChevronDown, MapPin } from 'lucide-react';
 import { addDeal } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const Upload = () => {
   const [title, setTitle] = useState('');
@@ -13,6 +15,7 @@ const Upload = () => {
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
+  const [mapPosition, setMapPosition] = useState([0, 0]);
   const [addedBy, setAddedBy] = useState('');
   const navigate = useNavigate();
   const { translations } = useLanguage();
@@ -56,10 +59,21 @@ const Upload = () => {
       imageBase64,
       category,
       expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
-      location: location || null,
+      location: location ? `${mapPosition[0]},${mapPosition[1]}` : null,
       addedBy: addedBy || null,
     };
     addDealMutation.mutate(newDeal);
+  };
+
+  const LocationMarker = () => {
+    useMapEvents({
+      click(e) {
+        setMapPosition([e.latlng.lat, e.latlng.lng]);
+        setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
+      },
+    });
+
+    return mapPosition ? <Marker position={mapPosition} /> : null;
   };
 
   return (
@@ -140,13 +154,20 @@ const Upload = () => {
             </div>
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} ({translations.optional})</label>
+              <div className="mt-1">
+                <MapContainer center={[0, 0]} zoom={2} style={{ height: '200px', width: '100%' }}>
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <LocationMarker />
+                </MapContainer>
+              </div>
               <input
                 type="text"
                 id="location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
                 placeholder={translations.enterLocation}
+                readOnly
               />
             </div>
             <div>
