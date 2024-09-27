@@ -15,11 +15,20 @@ const Upload = () => {
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
-  const [mapPosition, setMapPosition] = useState([0, 0]);
+  const [mapPosition, setMapPosition] = useState(null);
   const [addedBy, setAddedBy] = useState('');
   const navigate = useNavigate();
   const { translations } = useLanguage();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const savedLocation = localStorage.getItem('lastLocation');
+    if (savedLocation) {
+      const [lat, lng] = savedLocation.split(',').map(Number);
+      setMapPosition([lat, lng]);
+      setLocation(`${lat}, ${lng}`);
+    }
+  }, []);
 
   const addDealMutation = useMutation({
     mutationFn: addDeal,
@@ -70,17 +79,21 @@ const Upload = () => {
       click(e) {
         setMapPosition([e.latlng.lat, e.latlng.lng]);
         setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
+        localStorage.setItem('lastLocation', `${e.latlng.lat},${e.latlng.lng}`);
       },
     });
 
     useEffect(() => {
-      map.locate();
+      if (!mapPosition) {
+        map.locate();
+      }
     }, [map]);
 
     useEffect(() => {
       const onLocationFound = (e) => {
         setMapPosition([e.latlng.lat, e.latlng.lng]);
         setLocation(`${e.latlng.lat}, ${e.latlng.lng}`);
+        localStorage.setItem('lastLocation', `${e.latlng.lat},${e.latlng.lng}`);
         map.flyTo(e.latlng, map.getZoom());
       };
 
@@ -173,7 +186,7 @@ const Upload = () => {
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.location} ({translations.optional})</label>
               <div className="mt-1">
-                <MapContainer center={[0, 0]} zoom={2} style={{ height: '200px', width: '100%' }}>
+                <MapContainer center={mapPosition || [0, 0]} zoom={mapPosition ? 13 : 2} style={{ height: '200px', width: '100%' }}>
                   <LayersControl position="topright">
                     <LayersControl.BaseLayer checked name="OpenStreetMap">
                       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

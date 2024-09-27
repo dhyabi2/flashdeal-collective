@@ -172,35 +172,13 @@ const DealCard = ({ deal, onUpdate }) => {
         {deal.location && (
           <button
             onClick={openInGoogleMaps}
-            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+            className="mt-2 bg-blue-500 text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+            aria-label="Open in Google Maps"
           >
-            <MapPin className="w-4 h-4 mr-2" />
-            Open in Google Maps
+            <MapPin className="w-5 h-5" />
           </button>
         )}
       </div>
-      <AnimatePresence>
-        {showDetails && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="bg-gray-100 dark:bg-gray-700 p-4 rounded-b-lg"
-          >
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">More Details</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-2">{deal.description}</p>
-            <div className="flex items-center text-gray-600 dark:text-gray-300 mb-1">
-              <DollarSign className="w-4 h-4 mr-2" />
-              <span>{deal.price}</span>
-            </div>
-            <div className="flex items-center text-gray-600 dark:text-gray-300">
-              <MapPin className="w-4 h-4 mr-2" />
-              <span>{deal.location}</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 };
