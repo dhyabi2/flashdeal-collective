@@ -5,17 +5,17 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const BottomNav = () => {
   const location = useLocation();
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, translations } = useLanguage();
 
   const navItems = [
-    { path: '/', icon: Home, label: 'Home' },
-    { path: '/upload', icon: PlusCircle, label: 'Add Deal' },
+    { path: '/', icon: Home, label: translations.home },
+    { path: '/upload', icon: PlusCircle, label: translations.addDeal },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-10">
       <div className="flex justify-around items-center h-16">
-        {navItems.map(({ path, icon: Icon }) => (
+        {navItems.map(({ path, icon: Icon, label }) => (
           <Link
             key={path}
             to={path}
@@ -26,15 +26,16 @@ const BottomNav = () => {
             } transition-colors duration-200`}
           >
             <Icon size={28} />
+            <span className="sr-only">{label}</span>
           </Link>
         ))}
         <button
           onClick={toggleLanguage}
           className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-          aria-label="Toggle language"
+          aria-label={translations.changeLanguage}
         >
           <Globe size={28} />
-          <span className="sr-only">{language === 'ar' ? 'ع' : 'EN'}</span>
+          <span className="sr-only">{language === 'ar' ? 'EN' : 'ع'}</span>
         </button>
       </div>
     </nav>

@@ -13,11 +13,13 @@ export const useLanguage = () => {
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => {
     const savedLanguage = localStorage.getItem('language');
-    return savedLanguage || 'ar'; // Default to Arabic if no saved preference
+    return savedLanguage || 'en'; // Default to English if no saved preference
   });
 
   useEffect(() => {
     localStorage.setItem('language', language);
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
   }, [language]);
 
   const toggleLanguage = () => {
@@ -54,6 +56,7 @@ export const LanguageProvider = ({ children }) => {
       titleTooLong: 'Title must be 10 words or less',
       titleAndImageRequired: 'Title and image are mandatory',
       failedToAddDeal: 'Failed to add deal. Please try again.',
+      changeLanguage: 'Change Language',
     },
     ar: {
       home: 'الرئيسية',
@@ -84,6 +87,7 @@ export const LanguageProvider = ({ children }) => {
       titleTooLong: 'يجب أن يكون العنوان 10 كلمات أو أقل',
       titleAndImageRequired: 'العنوان والصورة إلزاميان',
       failedToAddDeal: 'فشل في إضافة الصفقة. يرجى المحاولة مرة أخرى.',
+      changeLanguage: 'تغيير اللغة',
     },
   };
 
