@@ -5,10 +5,10 @@ import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
 import FAB from '../components/FAB';
 import CategoryFilter from '../components/CategoryFilter';
+import SortingTabs from '../components/SortingTabs';
 import PullToRefresh from 'react-pull-to-refresh';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { sortDeals } from '../utils/dealUtils';
-import { ArrowUpDown } from 'lucide-react';
 
 const Home = () => {
   const [deals, setDeals] = useState([]);
@@ -87,22 +87,7 @@ const Home = () => {
       <Header />
       <div className="container mx-auto px-4 py-4">
         <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
-        <div className="flex justify-end mb-4">
-          <div className="relative">
-            <select
-              value={sortOption}
-              onChange={(e) => handleSortChange(e.target.value)}
-              className="appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white dark:focus:bg-gray-700 focus:border-indigo-500 transition-colors duration-200"
-            >
-              <option value="newest">Newest</option>
-              <option value="expiringSoon">Expiring Soon</option>
-              <option value="mostLiked">Most Liked</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-200">
-              <ArrowUpDown size={20} />
-            </div>
-          </div>
-        </div>
+        <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} />
       </div>
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll
