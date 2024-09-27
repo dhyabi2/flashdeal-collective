@@ -36,6 +36,11 @@ export const LanguageProvider = ({ children }) => {
       home: 'Home',
       beauty: 'Beauty',
       sports: 'Sports',
+      addedBy: 'Added By',
+      enterAddedBy: 'Enter your name',
+      titleTooLong: 'Title must be 10 words or less',
+      titleAndImageRequired: 'Title and image are mandatory',
+      failedToAddDeal: 'Failed to add deal. Please try again.',
     },
     es: {
       home: 'Inicio',
@@ -61,6 +66,11 @@ export const LanguageProvider = ({ children }) => {
       home: 'Hogar',
       beauty: 'Belleza',
       sports: 'Deportes',
+      addedBy: 'Añadido Por',
+      enterAddedBy: 'Ingrese su nombre',
+      titleTooLong: 'El título debe tener 10 palabras o menos',
+      titleAndImageRequired: 'El título y la imagen son obligatorios',
+      failedToAddDeal: 'No se pudo añadir la oferta. Por favor, inténtelo de nuevo.',
     },
   };
 

@@ -12,6 +12,7 @@ const Upload = () => {
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [location, setLocation] = useState('');
+  const [addedBy, setAddedBy] = useState(''); // New state for "Add By" field
   const navigate = useNavigate();
   const { translations } = useLanguage();
 
@@ -29,11 +30,11 @@ const Upload = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (title.split(' ').length > 10) {
-      alert('Title must be 10 words or less');
+      alert(translations.titleTooLong);
       return;
     }
     if (!title || !imageBase64) {
-      alert('Title and image are mandatory');
+      alert(translations.titleAndImageRequired);
       return;
     }
     try {
@@ -45,12 +46,13 @@ const Upload = () => {
         likes: 0,
         dislikes: 0,
         location,
+        addedBy, // Include the new "Add By" field
       };
       await addDeal(newDeal);
       navigate('/');
     } catch (error) {
       console.error('Error adding deal:', error);
-      alert('Failed to add deal. Please try again.');
+      alert(translations.failedToAddDeal);
     }
   };
 
@@ -139,6 +141,17 @@ const Upload = () => {
                 onChange={(e) => setLocation(e.target.value)}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
                 placeholder={translations.enterLocation}
+              />
+            </div>
+            <div>
+              <label htmlFor="addedBy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.addedBy}</label>
+              <input
+                type="text"
+                id="addedBy"
+                value={addedBy}
+                onChange={(e) => setAddedBy(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                placeholder={translations.enterAddedBy}
               />
             </div>
             <div>
