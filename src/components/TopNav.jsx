@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const TopNav = () => {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { language, toggleLanguage } = useLanguage();
 
   return (
