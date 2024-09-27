@@ -15,7 +15,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md z-10">
       <div className="container mx-auto px-4 py-2 flex items-center justify-between">
         <div className={`text-2xl font-bold text-indigo-600 dark:text-indigo-400 ${language === 'ar' ? 'font-arabic' : ''}`}>
-          {language === 'ar' ? 'السوق العماني' : 'Omani Market'}
+          {language === 'ar' ? 'ديسكاونت' : 'Discount'}
         </div>
         <button
           onClick={toggleTheme}
