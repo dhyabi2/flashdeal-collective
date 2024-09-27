@@ -133,20 +133,20 @@ const DealCard = ({ deal, onUpdate }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('likes') && handleVote('likes')}
-            className={`flex items-center justify-center w-16 h-16 rounded-full ${
+            className={`flex items-center justify-center w-12 h-12 rounded-full ${
               canVote('likes') ? 'bg-green-100 text-green-500 hover:bg-green-200 dark:bg-green-900 dark:text-green-400 dark:hover:bg-green-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('likes')}
             aria-label={`Like (${likes})`}
           >
             <div className="flex flex-col items-center">
-              <ThumbsUp className="mb-1" size={24} aria-hidden="true" />
+              <ThumbsUp className="mb-1" size={20} aria-hidden="true" />
               <motion.span
                 key={likes}
                 initial={{ scale: 1.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                className="text-sm font-bold"
+                className="text-xs font-bold"
               >
                 {likes}
               </motion.span>
@@ -157,35 +157,37 @@ const DealCard = ({ deal, onUpdate }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('dislikes') && handleVote('dislikes')}
-            className={`flex items-center justify-center w-16 h-16 rounded-full ${
+            className={`flex items-center justify-center w-12 h-12 rounded-full ${
               canVote('dislikes') ? 'bg-red-100 text-red-500 hover:bg-red-200 dark:bg-red-900 dark:text-red-400 dark:hover:bg-red-800' : 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('dislikes')}
             aria-label={`Dislike (${dislikes})`}
           >
             <div className="flex flex-col items-center">
-              <ThumbsDown className="mb-1" size={24} aria-hidden="true" />
+              <ThumbsDown className="mb-1" size={20} aria-hidden="true" />
               <motion.span
                 key={dislikes}
                 initial={{ scale: 1.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                className="text-sm font-bold"
+                className="text-xs font-bold"
               >
                 {dislikes}
               </motion.span>
             </div>
           </motion.button>
+          {deal.location && (
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={openInGoogleMaps}
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-500 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800 transition-colors duration-200"
+              aria-label="Open in Google Maps"
+            >
+              <MapPin size={20} aria-hidden="true" />
+            </motion.button>
+          )}
         </div>
-        {deal.location && (
-          <button
-            onClick={openInGoogleMaps}
-            className="mt-2 bg-blue-500 text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-            aria-label="Open in Google Maps"
-          >
-            <MapPin className="w-5 h-5" aria-hidden="true" />
-          </button>
-        )}
       </div>
     </motion.div>
   );
