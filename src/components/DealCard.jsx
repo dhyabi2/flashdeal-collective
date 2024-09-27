@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { updateDeal } from '../utils/indexedDB';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getUserIP } from '../utils/ipUtils';
 import ShareLink from './ShareLink';
+import useSwipe from '../hooks/useSwipe';
 
 const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -11,6 +12,8 @@ const DealCard = ({ deal, onUpdate }) => {
   const [dislikes, setDislikes] = useState(deal.dislikes || 0);
   const [progress, setProgress] = useState(100);
   const [userIP, setUserIP] = useState('');
+  const cardRef = useRef(null);
+  const swipeDirection = useSwipe(cardRef);
 
   useEffect(() => {
     const fetchUserIP = async () => {
@@ -72,11 +75,12 @@ const DealCard = ({ deal, onUpdate }) => {
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
-      className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
     >
       <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
       <div className="p-4">
@@ -125,6 +129,20 @@ const DealCard = ({ deal, onUpdate }) => {
           </motion.button>
         </div>
       </div>
+      <AnimatePresence>
+        {swipeDirection && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70"
+          >
+            <p className="text-white text-2xl font-serif tracking-wide">
+              Swipe for more details
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
