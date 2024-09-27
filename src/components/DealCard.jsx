@@ -68,6 +68,8 @@ const DealCard = ({ deal, onUpdate }) => {
     return !(deal[`${voteType}IPs`] || []).includes(userIP);
   };
 
+  const shareUrl = `${window.location.origin}/deal/${deal.id}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -109,7 +111,7 @@ const DealCard = ({ deal, onUpdate }) => {
           >
             <ThumbsUp className="mr-1" size={18} /> {likes}
           </motion.button>
-          <ShareLink dealId={deal.id} />
+          <ShareLink title={deal.title} url={shareUrl} />
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
