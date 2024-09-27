@@ -101,7 +101,13 @@ const DealCard = ({ deal, onUpdate }) => {
       whileHover={{ scale: 1.05 }}
       className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
     >
-      <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" loading="lazy" />
+      <img 
+        src={deal.imageBase64} 
+        alt={deal.title} 
+        className="w-full h-48 object-cover" 
+        loading="eager" 
+        fetchpriority="high"
+      />
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-2 font-serif text-gray-800 dark:text-gray-200">{deal.title}</h2>
         <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">{deal.category}</div>

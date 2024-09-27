@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { getAllDeals, generateDummyData } from '../utils/api';
-import DealCard from '../components/DealCard';
 import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
 import FAB from '../components/FAB';
@@ -11,6 +10,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { sortDeals } from '../utils/dealUtils';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+const DealCard = lazy(() => import('../components/DealCard'));
 
 const Home = () => {
   const [filteredDeals, setFilteredDeals] = useState([]);
@@ -90,7 +91,9 @@ const Home = () => {
                 ))
               ) : (
                 filteredDeals.map((deal) => (
-                  <DealCard key={deal.id} deal={deal} onUpdate={handleDealUpdate} />
+                  <Suspense key={deal.id} fallback={<DealCardSkeleton />}>
+                    <DealCard deal={deal} onUpdate={handleDealUpdate} />
+                  </Suspense>
                 ))
               )}
             </div>
