@@ -62,7 +62,6 @@ const Upload = () => {
     addDealMutation.mutate(newDeal);
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-gray-900 dark:to-indigo-900 flex items-center justify-center px-4 py-12">
       <motion.div
@@ -187,11 +186,6 @@ const Upload = () => {
         </div>
       </motion.div>
     </div>
-  );
-};
-
-  return (
-    // ... JSX remains the same
   );
 };
 
