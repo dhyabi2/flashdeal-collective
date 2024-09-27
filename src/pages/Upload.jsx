@@ -4,20 +4,35 @@ import { addDeal } from '../utils/indexedDB';
 
 const Upload = () => {
   const [title, setTitle] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageBase64, setImageBase64] = useState('');
   const [duration, setDuration] = useState(24);
   const navigate = useNavigate();
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (title.length > 50) {
-      alert('Title must be 50 characters or less');
+    if (title.split(' ').length > 10) {
+      alert('Title must be 10 words or less');
+      return;
+    }
+    if (!title || !imageBase64) {
+      alert('Title and image are mandatory');
       return;
     }
     try {
       const newDeal = {
         title,
-        imageUrl,
+        imageBase64,
         expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
         likes: 0,
         dislikes: 0,
@@ -35,27 +50,29 @@ const Upload = () => {
       <h1 className="text-3xl font-bold mb-8">Upload New Flash Deal</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title (max 50 characters)</label>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title (max 10 words)</label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            maxLength={50}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">Image URL</label>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image (PNG only)</label>
           <input
-            type="url"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            type="file"
+            id="image"
+            accept="image/png"
+            onChange={handleImageChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 block w-full"
           />
+          {imageBase64 && (
+            <img src={imageBase64} alt="Preview" className="mt-2 max-w-full h-auto" />
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="duration" className="block text-sm font-medium text-gray-700">Duration (hours)</label>

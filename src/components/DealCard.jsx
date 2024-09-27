@@ -49,7 +49,7 @@ const DealCard = ({ deal }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      <img src={deal.imageUrl} alt={deal.title} className="w-full h-48 object-cover" />
+      <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-2">{deal.title}</h2>
         <p className="text-sm text-gray-600 mb-4">Time left: {timeLeft}</p>
