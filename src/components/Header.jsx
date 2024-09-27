@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -14,7 +14,17 @@ const Header = () => {
 
   const letterVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.05,
+        repeat: Infinity,
+        repeatType: "reverse",
+        duration: 1.5,
+        ease: "easeInOut",
+      },
+    }),
   };
 
   const appName = language === 'ar' ? 'ديسكاونت' : 'Discount';
@@ -31,7 +41,7 @@ const Header = () => {
               variants={letterVariants}
               initial="hidden"
               animate="visible"
-              transition={{ delay: index * 0.1 }}
+              custom={index}
             >
               {letter}
             </motion.span>
