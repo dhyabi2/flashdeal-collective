@@ -87,8 +87,8 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
       <Header />
       <div className="container mx-auto px-4 py-2">
-        <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} translations={translations} />
-        <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} translations={translations} />
+        <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
+        <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} />
       </div>
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll
@@ -110,7 +110,7 @@ const Home = () => {
                 ))
               ) : (
                 filteredDeals.map((deal) => (
-                  <DealCard key={deal.id} deal={deal} onUpdate={handleDealUpdate} translations={translations} />
+                  <DealCard key={deal.id} deal={deal} onUpdate={handleDealUpdate} />
                 ))
               )}
             </div>
