@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload as UploadIcon, Clock, Tag, ChevronDown } from 'lucide-react';
+import { Upload as UploadIcon, Clock, ChevronDown } from 'lucide-react';
 import { addDeal } from '../utils/indexedDB';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,8 +10,6 @@ const Upload = () => {
   const [duration, setDuration] = useState(24);
   const [category, setCategory] = useState('Electronics');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
 
@@ -44,8 +42,6 @@ const Upload = () => {
         expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000).toISOString(),
         likes: 0,
         dislikes: 0,
-        description,
-        price,
         location,
       };
       await addDeal(newDeal);
@@ -131,28 +127,6 @@ const Upload = () => {
                   <img src={imageBase64} alt="Preview" className="max-w-full h-auto rounded-lg" />
                 </div>
               )}
-            </div>
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                rows="3"
-                placeholder="Enter deal description"
-              ></textarea>
-            </div>
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price</label>
-              <input
-                type="text"
-                id="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                placeholder="Enter price"
-              />
             </div>
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
