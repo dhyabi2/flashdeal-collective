@@ -189,7 +189,6 @@ const DealCard = ({ deal, onUpdate }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      </div>
     </motion.div>
   );
 };
