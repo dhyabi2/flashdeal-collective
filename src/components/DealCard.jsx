@@ -85,13 +85,6 @@ const DealCard = ({ deal, onUpdate }) => {
 
   const shareUrl = `${window.location.origin}/deal/${deal.id}`;
 
-  const openInMaps = () => {
-    if (deal.location && deal.location.lat && deal.location.lng) {
-      const url = `https://www.google.com/maps/search/?api=1&query=${deal.location.lat},${deal.location.lng}`;
-      window.open(url, '_blank');
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -168,15 +161,6 @@ const DealCard = ({ deal, onUpdate }) => {
             </div>
           </motion.button>
         </div>
-        {deal.location && deal.location.lat && deal.location.lng && (
-          <button
-            onClick={openInMaps}
-            className="mt-4 flex items-center justify-center w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200"
-          >
-            <MapPin className="mr-2" size={18} />
-            Open in Maps
-          </button>
-        )}
       </div>
       <AnimatePresence>
         {showDetails && (
@@ -195,7 +179,7 @@ const DealCard = ({ deal, onUpdate }) => {
             </div>
             <div className="flex items-center text-gray-600 dark:text-gray-300">
               <MapPin className="w-4 h-4 mr-2" />
-              <span>{deal.location ? `${deal.location.lat.toFixed(6)}, ${deal.location.lng.toFixed(6)}` : 'Location not specified'}</span>
+              <span>{deal.location}</span>
             </div>
           </motion.div>
         )}
