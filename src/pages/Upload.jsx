@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { addDeal } from '../utils/indexedDB';
 import { motion } from 'framer-motion';
-import { Upload as UploadIcon, Clock, Tag } from 'lucide-react';
+import { Upload as UploadIcon, Clock, Tag, ChevronDown } from 'lucide-react';
+import { addDeal } from '../utils/indexedDB';
+import { useNavigate } from 'react-router-dom';
 
 const Upload = () => {
   const [title, setTitle] = useState('');
   const [imageBase64, setImageBase64] = useState('');
   const [duration, setDuration] = useState(24);
   const [category, setCategory] = useState('Electronics');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -72,20 +73,37 @@ const Upload = () => {
                 placeholder="Enter deal title"
               />
             </div>
-            <div>
+            <div className="relative">
               <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-              <select
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200"
+              <div
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-700 dark:text-white transition-all duration-200 cursor-pointer flex justify-between items-center"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <option value="Electronics">Electronics</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Home">Home</option>
-                <option value="Beauty">Beauty</option>
-                <option value="Sports">Sports</option>
-              </select>
+                <span>{category}</span>
+                <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${isDropdownOpen ? 'transform rotate-180' : ''}`} />
+              </div>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg"
+                >
+                  {['Electronics', 'Fashion', 'Home', 'Beauty', 'Sports'].map((cat) => (
+                    <div
+                      key={cat}
+                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                      onClick={() => {
+                        setCategory(cat);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {cat}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
             </div>
             <div>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Image</label>
