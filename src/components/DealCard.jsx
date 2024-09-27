@@ -73,18 +73,23 @@ const DealCard = ({ deal, onUpdate }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.05 }}
-      className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       <img src={deal.imageBase64} alt={deal.title} className="w-full h-48 object-cover" />
-      <div className="p-4 bg-gray-50">
-        <h2 className="text-xl font-semibold mb-2 font-serif">{deal.title}</h2>
-        <div className="flex items-center mb-4">
-          <Clock className="w-4 h-4 mr-2 text-gray-500" />
-          <p className="text-sm text-gray-600">{timeLeft}</p>
+      <div className="p-4">
+        <h2 className="text-xl font-semibold mb-2 font-serif text-gray-800 dark:text-gray-200">{deal.title}</h2>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <Clock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+            <span className="text-sm font-medium text-indigo-600 dark:text-indigo-300">{timeLeft}</span>
+          </div>
+          <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+            {progress > 0 ? `${Math.round(progress)}% left` : 'Expired'}
+          </div>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
           <motion.div
-            className="bg-blue-600 h-2.5 rounded-full"
+            className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.5 }}
@@ -96,7 +101,7 @@ const DealCard = ({ deal, onUpdate }) => {
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('likes') && handleVote('likes')}
             className={`flex items-center ${
-              canVote('likes') ? 'text-green-500 hover:text-green-600' : 'text-gray-400'
+              canVote('likes') ? 'text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-300' : 'text-gray-400 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('likes')}
           >
@@ -107,7 +112,7 @@ const DealCard = ({ deal, onUpdate }) => {
             whileTap={{ scale: 0.9 }}
             onClick={() => canVote('dislikes') && handleVote('dislikes')}
             className={`flex items-center ${
-              canVote('dislikes') ? 'text-red-500 hover:text-red-600' : 'text-gray-400'
+              canVote('dislikes') ? 'text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300' : 'text-gray-400 dark:text-gray-500'
             } transition-colors duration-200`}
             disabled={!canVote('dislikes')}
           >
