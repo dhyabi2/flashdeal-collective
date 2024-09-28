@@ -65,7 +65,7 @@ export const LanguageProvider = ({ children }) => {
     ar: {
       home: 'الرئيسية',
       addDeal: 'إضافة صفقة',
-      createFlashDeal: 'إنشاء عرض سريع', // Updated translation here
+      createFlashDeal: 'إنشاء ديسكاونت سريع', // Updated text here
       title: 'العنوان',
       enterDealTitle: 'أدخل عنوان الصفقة',
       category: 'الفئة',
@@ -76,7 +76,7 @@ export const LanguageProvider = ({ children }) => {
       location: 'الموقع',
       enterLocation: 'أدخل الموقع',
       duration: 'المدة (بالساعات)',
-      create: 'إنشاء عرض سريع', // Updated translation here as well
+      create: 'أضف', // Updated button text here
       newest: 'الأحدث',
       expiringSoon: 'تنتهي قريبًا',
       mostLiked: 'الأكثر إعجابًا',
