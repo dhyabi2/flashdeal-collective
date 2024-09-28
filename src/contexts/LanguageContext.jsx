@@ -76,7 +76,7 @@ export const LanguageProvider = ({ children }) => {
       location: 'الموقع',
       enterLocation: 'أدخل الموقع',
       duration: 'المدة (بالساعات)',
-      create: 'إنشاء صفقة سريعة',
+      create: 'إنشاء عرض سريع', // Updated translation here as well
       newest: 'الأحدث',
       expiringSoon: 'تنتهي قريبًا',
       mostLiked: 'الأكثر إعجابًا',
