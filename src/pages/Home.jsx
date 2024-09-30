@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { getAllDeals, generateDummyData } from '../utils/api';
+import { getAllDeals } from '../utils/api';
 import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
 import FAB from '../components/FAB';
@@ -10,6 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { sortDeals } from '../utils/dealUtils';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { generateDummyDeals } from '../utils/dummyData';
 
 const DealCard = lazy(() => import('../components/DealCard'));
 
@@ -26,24 +27,24 @@ const Home = () => {
     queryKey: ['deals'],
     queryFn: getAllDeals,
     onError: () => {
-      generateDummyData();
+      console.error('Failed to fetch deals, using dummy data');
     },
   });
 
   useEffect(() => {
-    if (deals) {
-      const filtered = deals.filter(deal => 
-        selectedCategory === 'All' || deal.category === selectedCategory
-      );
-      const sorted = sortDeals(filtered, sortOption);
-      setFilteredDeals(sorted);
-      setHasMore(false); // Since we're getting all deals at once
-    }
+    let dealsToUse = deals || generateDummyDeals(20);
+    
+    const filtered = dealsToUse.filter(deal => 
+      selectedCategory === 'All' || deal.category === selectedCategory
+    );
+    const sorted = sortDeals(filtered, sortOption);
+    setFilteredDeals(sorted);
+    setHasMore(false); // Since we're getting all deals at once
   }, [deals, selectedCategory, sortOption]);
 
   const handleDealUpdate = (updatedDeal) => {
     queryClient.setQueryData(['deals'], old => 
-      old.map(deal => deal.id === updatedDeal.id ? updatedDeal : deal)
+      old ? old.map(deal => deal.id === updatedDeal.id ? updatedDeal : deal) : [updatedDeal]
     );
   };
 
@@ -60,9 +61,7 @@ const Home = () => {
     return null;
   };
 
-  if (error) {
-    return <div>Error loading deals. Please try again later.</div>;
-  }
+  const dealsToDisplay = filteredDeals.length > 0 ? filteredDeals : generateDummyDeals(10);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
@@ -73,7 +72,7 @@ const Home = () => {
       </div>
       <PullToRefresh onRefresh={handleRefresh}>
         <InfiniteScroll
-          dataLength={filteredDeals.length}
+          dataLength={dealsToDisplay.length}
           next={() => {}}
           hasMore={hasMore}
           loader={<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -90,7 +89,7 @@ const Home = () => {
                   <DealCardSkeleton key={index} />
                 ))
               ) : (
-                filteredDeals.map((deal) => (
+                dealsToDisplay.map((deal) => (
                   <Suspense key={deal.id} fallback={<DealCardSkeleton />}>
                     <DealCard deal={deal} onUpdate={handleDealUpdate} />
                   </Suspense>
