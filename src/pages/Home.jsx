@@ -2,7 +2,6 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { getAllDeals } from '../utils/api';
 import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
-import FAB from '../components/FAB';
 import CategoryFilter from '../components/CategoryFilter';
 import SortingTabs from '../components/SortingTabs';
 import PullToRefresh from 'react-pull-to-refresh';
@@ -63,6 +62,7 @@ const Home = () => {
 
   const dealsToDisplay = filteredDeals.length > 0 ? filteredDeals : generateDummyDeals(10);
 
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
       <Header />
@@ -99,7 +99,6 @@ const Home = () => {
           </div>
         </InfiniteScroll>
       </PullToRefresh>
-      <FAB />
     </div>
   );
 };

@@ -9,7 +9,6 @@ import BottomNav from "./components/BottomNav";
 import TopNav from "./components/TopNav";
 
 const Home = lazy(() => import("./pages/Home"));
-const Upload = lazy(() => import("./pages/Upload"));
 const SharedDealPage = lazy(() => import("./pages/SharedDealPage"));
 
 const queryClient = new QueryClient();
@@ -27,7 +26,6 @@ const App = () => {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/upload" element={<Upload />} />
                     <Route path="/deal/:id" element={<SharedDealPage />} />
                   </Routes>
                 </Suspense>
