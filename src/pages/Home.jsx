@@ -3,7 +3,6 @@ import { getAllDeals, generateDummyData } from '../utils/api';
 import DealCardSkeleton from '../components/DealCardSkeleton';
 import Header from '../components/Header';
 import FAB from '../components/FAB';
-import CategoryFilter from '../components/CategoryFilter';
 import SortingTabs from '../components/SortingTabs';
 import PullToRefresh from 'react-pull-to-refresh';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -17,7 +16,6 @@ const Home = () => {
   const [filteredDeals, setFilteredDeals] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('newest');
   const { translations } = useLanguage();
   const queryClient = useQueryClient();
@@ -32,23 +30,16 @@ const Home = () => {
 
   useEffect(() => {
     if (deals) {
-      const filtered = deals.filter(deal => 
-        selectedCategory === 'All' || deal.category === selectedCategory
-      );
-      const sorted = sortDeals(filtered, sortOption);
+      const sorted = sortDeals(deals, sortOption);
       setFilteredDeals(sorted);
       setHasMore(false); // Since we're getting all deals at once
     }
-  }, [deals, selectedCategory, sortOption]);
+  }, [deals, sortOption]);
 
   const handleDealUpdate = (updatedDeal) => {
     queryClient.setQueryData(['deals'], old => 
       old.map(deal => deal.id === updatedDeal.id ? updatedDeal : deal)
     );
-  };
-
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
   };
 
   const handleSortChange = (option) => {
@@ -68,7 +59,6 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-14 pb-20 relative overflow-hidden">
       <Header />
       <div className="container mx-auto px-4 py-2">
-        <CategoryFilter selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
         <SortingTabs activeSort={sortOption} onSortChange={handleSortChange} />
       </div>
       <PullToRefresh onRefresh={handleRefresh}>

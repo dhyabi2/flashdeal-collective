@@ -53,6 +53,10 @@ const Upload = () => {
     }
   };
 
+  const triggerFileInput = () => {
+    document.getElementById('image').click();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (title.split(' ').length > 10) {
@@ -164,7 +168,10 @@ const Upload = () => {
             </div>
             <div>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{translations.image}</label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg">
+              <div 
+                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg cursor-pointer"
+                onClick={triggerFileInput}
+              >
                 <div className="space-y-1 text-center">
                   <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="flex text-sm text-gray-600 dark:text-gray-400">
@@ -198,7 +205,6 @@ const Upload = () => {
                   <LocationMarker />
                 </MapContainer>
               </div>
-              {/* Hidden input for location */}
               <input
                 type="hidden"
                 id="location"
