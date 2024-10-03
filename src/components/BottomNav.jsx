@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Globe } from 'lucide-react';
+import { Home, PlusCircle, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const BottomNav = () => {
@@ -9,6 +9,7 @@ const BottomNav = () => {
 
   const navItems = [
     { path: '/', icon: Home, label: translations.home },
+    { path: '/upload', icon: PlusCircle, label: translations.addDeal },
     { path: '#', icon: Globe, label: translations.changeLanguage, onClick: toggleLanguage },
   ];
 
