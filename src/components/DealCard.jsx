@@ -6,6 +6,7 @@ import { getUserIP } from '../utils/ipUtils';
 import ShareLink from './ShareLink';
 import { playSoundEffect } from '../utils/soundEffects';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 const DealCard = ({ deal, onUpdate }) => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -85,6 +86,15 @@ const DealCard = ({ deal, onUpdate }) => {
 
   const shareUrl = `${window.location.origin}/deal/${deal.id}`;
 
+  const handleShare = async () => {
+    await navigator.clipboard.writeText(shareUrl);
+    toast.success('Share link copied to clipboard!', {
+      duration: 2000,
+      position: 'bottom-center',
+    });
+    playSoundEffect('share');
+  };
+
   const openInGoogleMaps = () => {
     if (deal.location) {
       const [lat, lng] = deal.location.split(',');
@@ -152,7 +162,7 @@ const DealCard = ({ deal, onUpdate }) => {
               </motion.span>
             </div>
           </motion.button>
-          <ShareLink title={deal.title} url={shareUrl} />
+          <ShareLink title={deal.title} url={shareUrl} onShare={handleShare} />
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}

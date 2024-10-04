@@ -2,9 +2,7 @@ import React from 'react';
 import { Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ShareLink = ({ title, url }) => {
-  const [shared, setShared] = React.useState(false);
-
+const ShareLink = ({ title, url, onShare }) => {
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -12,39 +10,24 @@ const ShareLink = ({ title, url }) => {
           title: title,
           url: url
         });
-        setShared(true);
-        setTimeout(() => setShared(false), 2000);
+        onShare();
       } catch (error) {
         console.error('Error sharing:', error);
       }
     } else {
-      console.log('Web Share API not supported');
-      // Fallback to copy to clipboard functionality
       await navigator.clipboard.writeText(url);
-      setShared(true);
-      setTimeout(() => setShared(false), 2000);
+      onShare();
     }
   };
 
   return (
     <motion.button
       onClick={handleShare}
-      className={`flex items-center justify-center p-2 rounded-full transition-colors duration-200 ${
-        shared ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-      }`}
+      className="flex items-center justify-center p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
       whileTap={{ scale: 0.95 }}
+      aria-label="Share"
     >
-      {shared ? (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        >
-          ✓
-        </motion.div>
-      ) : (
-        <Share2 size={18} />
-      )}
+      <Share2 size={18} />
     </motion.button>
   );
 };
